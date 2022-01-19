@@ -115,47 +115,16 @@ def single_payment_list(row_base=0, sourceFile='收費單_名冊.xlsx', targetFi
                         ws.cell(row=r, column=k).alignment = style_content['alignment']
                     else:
                         ws.cell(row=r, column=k).alignment = style_head['alignment']
-                ws.row_dimensions[r].height = 22                
-                ws.column_dimensions['A'].width = 15               
-                # 收費月份如果只有1個月，則調整儲存格寬度(以容納註記事項需要的寬度)
-                if ws.max_column == 2:
-                    ws.column_dimensions['B'].width = 60
-                elif ws.max_column == 3:
-                    ws.column_dimensions['B'].width = 30
-                    ws.column_dimensions['C'].width = 30
-                elif ws.max_column == 4:
-                    ws.column_dimensions['B'].width = 20
-                    ws.column_dimensions['C'].width = 20
-                    ws.column_dimensions['D'].width = 20
-                elif ws.max_column == 5:
-                    ws.column_dimensions['B'].width = 15
-                    ws.column_dimensions['C'].width = 15
-                    ws.column_dimensions['D'].width = 15
-                    ws.column_dimensions['E'].width = 15
-                elif ws.max_column == 6:
-                    ws.column_dimensions['B'].width = 12
-                    ws.column_dimensions['C'].width = 12
-                    ws.column_dimensions['D'].width = 12
-                    ws.column_dimensions['E'].width = 12
-                    ws.column_dimensions['F'].width = 12                    
-                elif ws.max_column == 7:
-                    ws.column_dimensions['B'].width = 10
-                    ws.column_dimensions['C'].width = 10
-                    ws.column_dimensions['D'].width = 10
-                    ws.column_dimensions['E'].width = 10
-                    ws.column_dimensions['F'].width = 10
-                    ws.column_dimensions['G'].width = 10
-                else:
-                    pass
-                    '''
-                    ws.column_dimensions['B'].width = 10
-                    ws.column_dimensions['C'].width = 10
-                    ws.column_dimensions['D'].width = 10
-                    ws.column_dimensions['E'].width = 10
-                    ws.column_dimensions['F'].width = 10
-                    ws.column_dimensions['G'].width = 10
-                    '''
-            
+                # 設定表格儲存格的大小
+                ws.row_dimensions[r].height = 22 # 列的固定高度
+                ws.column_dimensions['A'].width = 15 # 第一欄('項目/日期')固定寬度
+                # 調整各月份儲存格的寬度
+                if ws.max_column >= 2 and ws.max_column <= 7:
+                    col_dic = col_obj[ws.max_column] # 取出對應的字典(dictionary object)物件
+                    for idx in range(2, ws.max_column+1, 1):
+                        col_idx_alphabet = str(col_idx[idx]) # 取出對應到工作表欄位名稱(i.e., 'A','B',...)
+                        ws.column_dimensions[col_idx_alphabet].width = col_dic[idx] # 取出儲存格(月份)對應的寬度大小
+        
             ##
             # 註記事項 
             for idx in range(row+2, ws.max_row+1, 1): # row 需加上第1列，且range計數起始值設成1開始，所以row加上2
@@ -280,46 +249,15 @@ def merged_payment_list(noMerge=3, sourceFile='收費單.xlsx', targetFile='收�
                             ws_target.cell(row=r, column=k).alignment = style_content['alignment']
                         else:
                             ws_target.cell(row=r, column=k).alignment = style_head['alignment']
-                    ws_target.row_dimensions[r].height = 22                
-                    ws_target.column_dimensions['A'].width = 15               
-                    # 收費月份如果只有1個月，則調整儲存格寬度(以容納註記事項需要的寬度)
-                    if ws.max_column == 2:
-                        ws_target.column_dimensions['B'].width = 60
-                    elif ws.max_column == 3:
-                        ws_target.column_dimensions['B'].width = 30
-                        ws_target.column_dimensions['C'].width = 30
-                    elif ws.max_column == 4:
-                        ws_target.column_dimensions['B'].width = 20
-                        ws_target.column_dimensions['C'].width = 20
-                        ws_target.column_dimensions['D'].width = 20
-                    elif ws.max_column == 5:
-                        ws_target.column_dimensions['B'].width = 15
-                        ws_target.column_dimensions['C'].width = 15
-                        ws_target.column_dimensions['D'].width = 15
-                        ws_target.column_dimensions['E'].width = 15
-                    elif ws.max_column == 6:
-                        ws_target.column_dimensions['B'].width = 12
-                        ws_target.column_dimensions['C'].width = 12
-                        ws_target.column_dimensions['D'].width = 12
-                        ws_target.column_dimensions['E'].width = 12
-                        ws_target.column_dimensions['F'].width = 12
-                    elif ws.max_column == 7:
-                        ws_target.column_dimensions['B'].width = 10
-                        ws_target.column_dimensions['C'].width = 10
-                        ws_target.column_dimensions['D'].width = 10
-                        ws_target.column_dimensions['E'].width = 10
-                        ws_target.column_dimensions['F'].width = 10
-                        ws_target.column_dimensions['G'].width = 10
-                    else:
-                        pass
-                        '''
-                        ws_target.column_dimensions['B'].width = 10
-                        ws_target.column_dimensions['C'].width = 10
-                        ws_target.column_dimensions['D'].width = 10
-                        ws_target.column_dimensions['E'].width = 10
-                        ws_target.column_dimensions['F'].width = 10
-                        ws_target.column_dimensions['G'].width = 10
-                        '''
+                    # 設定表格儲存格的大小
+                    ws_target.row_dimensions[r].height = 22 # 列的固定高度
+                    ws_target.column_dimensions['A'].width = 15 # 第一欄('項目/日期')固定寬度
+                    # 調整各月份儲存格的寬度
+                    if ws.max_column >= 2 and ws.max_column <= 7:
+                        col_dic = col_obj[ws.max_column] # 取出對應的字典(dictionary object)物件
+                        for idx in range(2, ws.max_column+1, 1):
+                            col_idx_alphabet = str(col_idx[idx]) # 取出對應到工作表欄位名稱(i.e., 'A','B',...)
+                            ws_target.column_dimensions[col_idx_alphabet].width = col_dic[idx] # 取出儲存格(月份)對應的寬度大小       
                 else:
                     # 註記事項
                     ws_target.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ws.max_column)
@@ -370,46 +308,15 @@ def merged_payment_list(noMerge=3, sourceFile='收費單.xlsx', targetFile='收�
                         ws_target.cell(row=r, column=k).alignment = style_content['alignment']
                     else:
                         ws_target.cell(row=r, column=k).alignment = style_head['alignment']
-                ws_target.row_dimensions[r].height = 22                
-                ws_target.column_dimensions['A'].width = 15                
-                # 收費月份如果只有1個月，則調整儲存格寬度(以容納註記事項需要的寬度)   
-                if ws.max_column == 2:
-                    ws_target.column_dimensions['B'].width = 60
-                elif ws.max_column == 3:
-                    ws_target.column_dimensions['B'].width = 30
-                    ws_target.column_dimensions['C'].width = 30
-                elif ws.max_column == 4:
-                    ws_target.column_dimensions['B'].width = 20
-                    ws_target.column_dimensions['C'].width = 20
-                    ws_target.column_dimensions['D'].width = 20
-                elif ws.max_column == 5:
-                    ws_target.column_dimensions['B'].width = 15
-                    ws_target.column_dimensions['C'].width = 15
-                    ws_target.column_dimensions['D'].width = 15
-                    ws_target.column_dimensions['E'].width = 15
-                elif ws.max_column == 6:
-                    ws_target.column_dimensions['B'].width = 12
-                    ws_target.column_dimensions['C'].width = 12
-                    ws_target.column_dimensions['D'].width = 12
-                    ws_target.column_dimensions['E'].width = 12
-                    ws_target.column_dimensions['F'].width = 12
-                elif ws.max_column == 7:
-                    ws_target.column_dimensions['B'].width = 10
-                    ws_target.column_dimensions['C'].width = 10
-                    ws_target.column_dimensions['D'].width = 10
-                    ws_target.column_dimensions['E'].width = 10
-                    ws_target.column_dimensions['F'].width = 10
-                    ws_target.column_dimensions['G'].width = 10
-                else:
-                    pass
-                    '''
-                    ws_target.column_dimensions['B'].width = 10
-                    ws_target.column_dimensions['C'].width = 10
-                    ws_target.column_dimensions['D'].width = 10
-                    ws_target.column_dimensions['E'].width = 10
-                    ws_target.column_dimensions['F'].width = 10
-                    ws_target.column_dimensions['G'].width = 10
-                    '''
+                # 設定表格儲存格的大小
+                ws_target.row_dimensions[r].height = 22 # 列的固定高度
+                ws_target.column_dimensions['A'].width = 15 # 第一欄('項目/日期')固定寬度
+                # 調整各月份儲存格的寬度
+                if ws.max_column >= 2 and ws.max_column <= 7:
+                    col_dic = col_obj[ws.max_column] # 取出對應的字典(dictionary object)物件
+                    for idx in range(2, ws.max_column+1, 1):
+                        col_idx_alphabet = str(col_idx[idx]) # 取出對應到工作表欄位名稱(i.e., 'A','B',...)
+                        ws_target.column_dimensions[col_idx_alphabet].width = col_dic[idx] # 取出儲存格(月份)對應的寬度大小 
             else:
                 # 註記事項
                 ws_target.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ws.max_column)
@@ -444,7 +351,7 @@ if __name__ == '__main__':
         "font": Font(color="000000", bold=True, name="標楷體", size=14),
         "alignment": Alignment(horizontal="center", vertical="center")
         }
-    # 定義表內容樣式
+    # 定義表格內容樣式
     style_content = {
         "border": Border(left=Side(style='thin', color='FF000000'), 
                          right=Side(style='thin', color='FF000000'),
@@ -452,6 +359,16 @@ if __name__ == '__main__':
                          bottom=Side(style='thin', color='FF000000')),
         "alignment": Alignment(horizontal='left', vertical='center'),
         "font": Font(name="標楷體", size=14)}
+    # 定義表格儲存格的大小，2個欄位~7個欄位
+    columns_2 = {1:15, 2:60}
+    columns_3 = {1:15, 2:30, 3:30}
+    columns_4 = {1:15, 2:20, 3:20, 4:20}
+    columns_5 = {1:15, 2:15, 3:15, 4:15, 5:15}
+    columns_6 = {1:15, 2:12, 3:12, 4:12, 5:12, 6:12}
+    columns_7 = {1:15, 2:10, 3:10, 4:10, 5:10, 6:10, 7:10}
+    col_idx = {1:'A', 2:'B', 3:'C', 4:'D', 5:'E', 6:'F', 7:'G'} # 欄位名稱(對應工作表 A~G)
+    col_obj = {2:columns_2, 3:columns_3, 4:columns_4, 5:columns_5, 6:columns_6, 7:columns_7} #對應取出字典物件(dictionary object)名稱
+    
     # 定義備註樣式
     style_note = {
         "border": Border(left=Side(style='thin', color='FF000000'), 
@@ -459,7 +376,8 @@ if __name__ == '__main__':
                          top=Side(style='thin', color='FF000000'), 
                          bottom=Side(style='thin', color='FF000000')),
         "alignment": Alignment(horizontal='left', vertical='center'),
-        "font": Font(name="標楷體", size=12)}
+        "font": Font(name="標楷體", size=10)}
+    
     ##
     # 根據收費資料，製作學生收費表(Excel工作表)、列印用收費單(Excel、PDF)
     # 1. 收費資料轉成收費表框架
